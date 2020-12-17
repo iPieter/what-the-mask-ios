@@ -151,7 +151,7 @@ export default class HomeView extends React.PureComponent {
                 raised
                 name="location-arrow"
                 type="font-awesome"
-                size={23}
+                // size={23}
                 color={this.state.followLocation ? "blue" : "grey"}
               />
             }
@@ -233,5 +233,7 @@ const styles = StyleSheet.create({
     top: 5,
     right: 5,
     alignSelf: "flex-end",
+    width: 30,
+    height: 30,
   },
 });
