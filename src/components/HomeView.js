@@ -137,7 +137,7 @@ export default class HomeView extends React.PureComponent {
     console.log('[location] -', location);
     const myPosition = location.coords;
     this.setState({myPosition});
-    if (this.state.followLocation) {
+    //if (this.state.followLocation) {
       let region = {
         latitude: myPosition.latitude,
         longitude: myPosition.longitude,
@@ -145,7 +145,7 @@ export default class HomeView extends React.PureComponent {
         longitudeDelta: 0.0421,
       };
       this.setState({region});
-    }
+    //}
   }
   onError(error) {
     console.warn('[location] ERROR -', error);
@@ -181,8 +181,8 @@ export default class HomeView extends React.PureComponent {
           </Marker>
           <Geojson
             geojson={myPlace}
-            strokeColor="#3498db"
-            fillColor="#3498db44"
+            strokeColor="rgb(48,127,250)"
+            fillColor="rgba(48,127,250,0.1)"
             strokeWidth={2}
           />
         </MapView>
