@@ -222,8 +222,8 @@ export default class HomeView extends React.PureComponent {
           </Marker>
           <Geojson
             geojson={myPlace}
-            strokeColor="#3498db"
-            fillColor="#3498db44"
+            strokeColor="rgb(48,127,250)"
+            fillColor="rgba(48,127,250, 0.1)"
             strokeWidth={2}
           />
         </MapView>
