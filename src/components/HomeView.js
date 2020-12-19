@@ -11,6 +11,9 @@ import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Pressable} from 'react-native';
 import BackgroundGeolocation from 'react-native-background-geolocation';
+import {update_location} from '../redux/locationActions';
+import {useSelector, useDispatch} from 'react-redux';
+import {store} from '../redux/store';
 
 Icon.loadFont();
 
@@ -68,10 +71,25 @@ export default class HomeView extends React.PureComponent {
     //
 
     // This handler fires whenever bgGeo receives a location update.
-    BackgroundGeolocation.onLocation(
-      (location) => this.onLocation(location),
-      this.onError,
-    );
+    BackgroundGeolocation.onLocation((location) => {
+      console.log('[location] -', location);
+      const myPosition = location.coords;
+      store.dispatch(
+        update_location({
+          latitude: myPosition.latitude,
+          longitude: myPosition.longitude,
+        }),
+      );
+      this.setState({myPosition});
+      //if (this.state.followLocation) {
+      let region = {
+        latitude: myPosition.latitude,
+        longitude: myPosition.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+      this.setState({region});
+    }, this.onError);
 
     // This handler fires when movement states changes (stationary->moving; moving->stationary)
     BackgroundGeolocation.onMotionChange(this.onMotionChange);
@@ -133,20 +151,6 @@ export default class HomeView extends React.PureComponent {
     BackgroundGeolocation.removeListeners();
   }
 
-  onLocation(location) {
-    console.log('[location] -', location);
-    const myPosition = location.coords;
-    this.setState({myPosition});
-    //if (this.state.followLocation) {
-      let region = {
-        latitude: myPosition.latitude,
-        longitude: myPosition.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      };
-      this.setState({region});
-    //}
-  }
   onError(error) {
     console.warn('[location] ERROR -', error);
   }
@@ -161,6 +165,8 @@ export default class HomeView extends React.PureComponent {
   }
 
   render() {
+    const location = store.useSelector((state) => state.location);
+
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <MapView
@@ -171,7 +177,7 @@ export default class HomeView extends React.PureComponent {
             anchor={{x: 0.5, y: 0.5}}
             style={styles.mapMarker}
             {...this.props}
-            coordinate={this.state.myPosition}>
+            coordinate={location}>
             <View style={styles.container}>
               <View style={styles.markerHalo} />
 

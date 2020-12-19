@@ -2,10 +2,10 @@ import * as React from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
-import {increment_counter, decrement_counter} from '../redux/locationActions';
+import {update_location} from '../redux/locationActions';
 
 const MainApp = () => {
-  const counter = useSelector((state) => state.counter);
+  const location = useSelector((state) => state.location);
   const dispatch = useDispatch();
   return (
     <View
@@ -14,9 +14,11 @@ const MainApp = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Button title="increase" onPress={() => dispatch(increment_counter())} />
-      <Text>{counter}</Text>
-      <Button title="decrease" onPress={() => dispatch(decrement_counter())} />
+      <Button
+        title="update"
+        onPress={() => dispatch(update_location({latitude: 1, longitude: 1}))}
+      />
+      <Text>{location.longitude}</Text>
     </View>
   );
 };
@@ -37,7 +39,7 @@ export default class LegalNoticeView extends React.PureComponent {
         <Text style={styles.text}>
           - GDPR data processing - opt out - contact info - MIT/apache packages
         </Text>
-        <MainApp/>
+        <MainApp />
       </View>
     );
   }

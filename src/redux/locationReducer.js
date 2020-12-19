@@ -1,17 +1,14 @@
 const initialState = {
-  counter: 0,
+  location: {latitude: 0, longitude: 0},
 };
-const counter_reducer = (state = initialState, action) => {
+const location_reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'increment': {
-      return {...state, counter: state.counter + 1};
-    }
-    case 'decrement': {
-      return {...state, counter: state.counter - 1};
+    case 'UPDATE_LOCATION': {
+      return {...state, location: action.location};
     }
     default: {
       return state;
     }
   }
 };
-export default counter_reducer;
+export default location_reducer;

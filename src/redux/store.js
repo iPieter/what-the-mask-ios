@@ -1,5 +1,5 @@
 import {createStore} from 'redux';
-import counter_reducer from './locationReducer';
+import location_reducer from './locationReducer';
 
-const store = createStore(counter_reducer);
+const store = createStore(location_reducer);
 export {store};
