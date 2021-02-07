@@ -15,6 +15,7 @@ export default class HomeView extends React.PureComponent {
   constructor(props) {
     super(props);
     this.mounted = false;
+    this.navigation = props.navigation;
 
     let deviceId;
     if (Settings.get('deviceId') == null) {
@@ -164,32 +165,29 @@ export default class HomeView extends React.PureComponent {
     }
 
     let currentState = false;
-    let time = (new Date()).getHours();
+    let time = new Date().getHours();
 
     if (this.state.geojson != null) {
       for (let feature of this.state.geojson.features) {
         let startHour = feature.properties.start || 0;
         let endHour = feature.properties.end || 23;
-        if (startHour <= time
-            && endHour > time
-            && this.inside(myPosition, feature.geometry.coordinates[0])) {
-              currentState = true;
-            }
+        if (
+          startHour <= time &&
+          endHour > time &&
+          this.inside(myPosition, feature.geometry.coordinates[0])
+        ) {
+          currentState = true;
+        }
       }
 
       if (currentState !== this.state.lastState) {
-          //show notifications
-          if (currentState)
-          this.showEnteringZoneNotification();
-          else this.showLeavingZoneNotification();
-        }
+        //show notifications
+        if (currentState) this.showEnteringZoneNotification();
+        else this.showLeavingZoneNotification();
+      }
 
-        //and log events on remote server for debugging/statistics
-        this.logEvent(
-          location,
-          currentState ? 'entering_zone' : 'leaving_zone',
-        );
-
+      //and log events on remote server for debugging/statistics
+      this.logEvent(location, currentState ? 'entering_zone' : 'leaving_zone');
 
       this.setState({lastState: currentState});
     }
