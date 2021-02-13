@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Settings} from 'react-native';
+import {View, Text, StyleSheet, Settings, Platform} from 'react-native';
 import MapView, {Marker, Geojson} from 'react-native-maps';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,6 +8,7 @@ import BackgroundGeolocation from 'react-native-background-geolocation';
 import {Notifications} from 'react-native-notifications';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
+import {AsyncStorage} from '@react-native-async-storage/async-storage';
 
 Icon.loadFont();
 
@@ -53,27 +54,37 @@ export default class HomeView extends React.PureComponent {
     );
   }
   async getData(key) {
-      if (Platform.OS == 'android') {
-          try {
-              const res = await AsyncStorage.getItem(key);
-              return res;
-          } catch (e) {
-              console.warn(e);
-              return null;
-          }
-      } else {
-          return Settings.get(key);
-      };
-  };
+    if (Platform.OS == 'android') {
+      try {
+        const settings = await AsyncStorage.getItem('settings');
+        return JSON.parse(settings)[key];
+      } catch (e) {
+        console.warn(e);
+        return null;
+      }
+    } else {
+      return Settings.get(key);
+    }
+  }
 
-  async setData(key, value) {
-      if (Platform.OS == 'android') {
-          await AsyncStorage.setItem(key, value);
-      } else {
-          Settings.set({key: value});
+  async setData(data) {
+    if (Platform.OS == 'android') {
+      await AsyncStorage.mergeItem('settings', JSON.stringify(data));
+    } else {
+      Settings.set(data);
+    }
+  }
+
+  async componentDidMount() {
+    warnings = await this.getData('sendWarnings');
+    if (warnings == null) {
+      this.navigation.replace('Welcome');
+      return () => {
+        this.setData({sendWarnings: false});
       };
-  };
-    
+    }
+  }
+
   componentWillMount() {
     ////
     // 1.  Wire up event-listeners
