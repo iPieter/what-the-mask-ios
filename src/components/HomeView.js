@@ -18,11 +18,11 @@ export default class HomeView extends React.PureComponent {
     this.navigation = props.navigation;
 
     let deviceId;
-    if (Settings.get('deviceId') == null) {
+    if (this.getData('deviceId') == null) {
       deviceId = uuidv4();
-      Settings.set({deviceId: deviceId});
+      this.SetData('deviceId', deviceId);
     } else {
-      deviceId = Settings.get('deviceId');
+      deviceId = this.getData('deviceId');
     }
 
     this.state = {
@@ -52,7 +52,28 @@ export default class HomeView extends React.PureComponent {
       },
     );
   }
+  async getData(key) {
+      if (Platform.OS == 'android') {
+          try {
+              const res = await AsyncStorage.getItem(key);
+              return res;
+          } catch (e) {
+              console.warn(e);
+              return null;
+          }
+      } else {
+          return Settings.get(key);
+      };
+  };
 
+  async setData(key, value) {
+      if (Platform.OS == 'android') {
+          await AsyncStorage.setItem(key, value);
+      } else {
+          Settings.set({key: value});
+      };
+  };
+    
   componentWillMount() {
     ////
     // 1.  Wire up event-listeners
