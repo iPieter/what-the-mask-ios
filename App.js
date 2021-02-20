@@ -27,16 +27,28 @@ function App() {
                 name="cog"
                 type="font-awesome"
                 size={25}
-                style={{ marginRight: 10 }}
+                style={{marginRight: 21, color: 'rgb(48,127,250)'}}
               />
             ),
           })}
         />
-        <Stack.Screen name="Welcome" component={WelcomeViewA} />
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeViewA}
+          options={{title: 'Welkom'}}
+        />
         <Stack.Screen name="Location" component={WelcomeViewB} />
         <Stack.Screen name="Background" component={WelcomeViewC} />
-        <Stack.Screen name="Settings" component={SettingsView} options={{ title: 'Instellingen' }}/>
-        <Stack.Screen name="LegalNotice" component={LegalNoticeView} options={{ title: 'Servicevoorwaarden' }}/>
+        <Stack.Screen
+          name="Settings"
+          component={SettingsView}
+          options={{title: 'Instellingen'}}
+        />
+        <Stack.Screen
+          name="LegalNotice"
+          component={LegalNoticeView}
+          options={{title: 'Servicevoorwaarden'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
