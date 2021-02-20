@@ -2,8 +2,8 @@
     <img src="res/what-the-mask-logo.png" alt="alternate text" width="60%">
  </p>
 
-
 ## What the mask · iOS Application
+
 _if you're looking for the Android version, you can find it [here »](https://github.com/iPieter/what-the-mask-android)_
 
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)
@@ -31,11 +31,13 @@ Our technology stack is as follows:
 ## Getting started
 
 First make sure you have installed
+
 - [XCode](https://developer.apple.com/xcode/)
 - [Node](https://www.npmjs.com/)
 - [Cocoapods](https://cocoapods.org/)
 
 To get up and running quickly, use the following commands:
+
 ```
 npm install
 cd ios
@@ -43,11 +45,14 @@ pod install
 ```
 
 To simulate the application on an iOS device, run in two separate terminals
+
 ```
 npx react-native start
 npx react-native run-ios
 ```
-To run on a connected device, e.g. Max's iPhone: 
+
+To run on a connected device, e.g. Max's iPhone:
+
 ```
 npx react-native start
 npx react-native run-ios --device "Max's iPhone"
@@ -57,6 +62,8 @@ npx react-native run-ios --device "Max's iPhone"
 
 - Multiple declarations of .ttf file  
   https://stackoverflow.com/questions/50718018/xcode-10-error-multiple-commands-produce
+
+  After `pod install`, there will be multiple declarations of some files. This will cause the build to fail. You can revert the file `ios/bat.xcodeproj/project.pbxproj` with Git to the correct version.
 
 ## Some links to useful resources
 
