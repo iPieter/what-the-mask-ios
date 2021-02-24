@@ -18,11 +18,11 @@ export default class HomeView extends React.PureComponent {
     this.navigation = props.navigation;
 
     let deviceId;
-    if (this.getData('deviceId') == null) {
+    if (Settings.get('deviceId') == null) {
       deviceId = uuidv4();
-      this.SetData('deviceId', deviceId);
+      Settings.set({deviceId: deviceId});
     } else {
-      deviceId = this.getData('deviceId');
+      deviceId = Settings.get('deviceId');
     }
 
     this.state = {
@@ -176,8 +176,12 @@ export default class HomeView extends React.PureComponent {
       let region = {
         latitude: myPosition.latitude,
         longitude: myPosition.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: this.state.region
+          ? this.state.region.latitudeDelta
+          : 0.0922,
+        longitudeDelta: this.state.region
+          ? this.state.region.longitudeDelta
+          : 0.0421,
       };
       this.setState({region});
     }
@@ -202,11 +206,13 @@ export default class HomeView extends React.PureComponent {
         //show notifications
         if (currentState) this.showEnteringZoneNotification();
         else this.showLeavingZoneNotification();
+
+        //and log events on remote server for debugging/statistics
+        this.logEvent(
+          location,
+          currentState ? 'entering_zone' : 'leaving_zone',
+        );
       }
-
-      //and log events on remote server for debugging/statistics
-      this.logEvent(location, currentState ? 'entering_zone' : 'leaving_zone');
-
       this.setState({lastState: currentState});
     }
   }
@@ -214,6 +220,7 @@ export default class HomeView extends React.PureComponent {
   async logEvent(location, event) {
     location.event = event;
     location.deviceId = this.state.deviceId;
+    location.version = 'ios-v.1.0';
     const i = {
       method: 'POST',
       headers: {
@@ -222,7 +229,8 @@ export default class HomeView extends React.PureComponent {
       body: JSON.stringify(location),
     };
 
-    let response = await fetch('https://bat.ipieter.be/bat/events/trigger', i);
+    //let response = await fetch('https://bat.ipieter.be/bat/events/trigger', i);
+    let response = await fetch('http://localhost:8000/bat/events/trigger', i);
     console.log(response.ok);
   }
 
@@ -292,7 +300,10 @@ export default class HomeView extends React.PureComponent {
           compassOffset={{x: -370, y: 0}}
           style={styles.map}
           region={this.state.region}
-          onPanDrag={(event) => this.setState({followLocation: false})}>
+          onPanDrag={(event) => {
+            this.setState({followLocation: false});
+            console.log(event._dispatchInstances.pendingProps);
+          }}>
           <Marker
             anchor={{x: 0.5, y: 0.5}}
             style={styles.mapMarker}
