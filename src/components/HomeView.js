@@ -220,7 +220,7 @@ export default class HomeView extends React.PureComponent {
   async logEvent(location, event) {
     location.event = event;
     location.deviceId = this.state.deviceId;
-    location.version = 'ios-v.1.0';
+    location.version = 'iOS v1.0';
     const i = {
       method: 'POST',
       headers: {
@@ -300,7 +300,6 @@ export default class HomeView extends React.PureComponent {
           compassOffset={{x: -370, y: 0}}
           style={styles.map}
           region={this.state.followLocation ? this.state.region : null}
-          onRegionChange={this.onRegionChange}
           onPanDrag={(event) => {
             this.setState({followLocation: false});
           }}>
