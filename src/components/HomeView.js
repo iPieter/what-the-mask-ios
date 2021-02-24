@@ -299,10 +299,10 @@ export default class HomeView extends React.PureComponent {
         <MapView
           compassOffset={{x: -370, y: 0}}
           style={styles.map}
-          region={this.state.region}
+          region={this.state.followLocation ? this.state.region : null}
+          onRegionChange={this.onRegionChange}
           onPanDrag={(event) => {
             this.setState({followLocation: false});
-            console.log(event._dispatchInstances.pendingProps);
           }}>
           <Marker
             anchor={{x: 0.5, y: 0.5}}
