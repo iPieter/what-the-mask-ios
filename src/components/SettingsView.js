@@ -2,7 +2,6 @@ import * as React from 'react';
 import {View, Text, StyleSheet, Switch, Settings} from 'react-native';
 import SegmentedControl from '@react-native-community/segmented-control';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Icon.loadFont();
 export default class SettingsView extends React.PureComponent {
@@ -40,23 +39,13 @@ export default class SettingsView extends React.PureComponent {
   }
 
   async getData(key) {
-    if (Platform.OS == 'android') {
-      try {
-        const settings = await AsyncStorage.getItem('settings');
-        return JSON.parse(settings)[key];
-      } catch (e) {
-        console.warn(e);
-        return null;
-      }
-    } else {
+    if (Platform.OS == 'ios') {
       return Settings.get(key);
     }
   }
 
   async setData(data) {
-    if (Platform.OS == 'android') {
-      await AsyncStorage.mergeItem('settings', JSON.stringify(data));
-    } else {
+    if (Platform.OS == 'ios') {
       Settings.set(data);
     }
   }
