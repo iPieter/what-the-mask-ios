@@ -236,6 +236,7 @@ export default class HomeView extends React.PureComponent {
 
   showEnteringZoneNotification(activity = 'walking') {
     console.log('Inside polygon, sending notification.');
+    Notifications.cancelLocalNotification(1);
     let localNotification = Notifications.postLocalNotification({
       body: 'Je bent nu in een mondmaskerzone voor voetgangers.',
       title: 'Draag je mondmasker.',
@@ -243,11 +244,12 @@ export default class HomeView extends React.PureComponent {
       silent: false,
       category: 'SOME_CATEGORY',
       userInfo: {},
-    });
+    }, 1);
   }
 
   showLeavingZoneNotification(activity = 'walking') {
     console.log('Outside polygon, sending notification.');
+    Notifications.cancelLocalNotification(1);
     let localNotification = Notifications.postLocalNotification({
       body: 'Je verlaat een mondmaskerzone voor voetgangers.',
       title: 'Geen mondmaskerplicht.',
@@ -255,7 +257,7 @@ export default class HomeView extends React.PureComponent {
       silent: false,
       category: 'SOME_CATEGORY',
       userInfo: {},
-    });
+    }, 1);
   }
 
   onError(error) {
